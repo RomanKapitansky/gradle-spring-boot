@@ -1,14 +1,12 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-
 <html>
 <head>
     <title>All Users page</title>
 </head>
 <body>
-    <h1>All Users page</h1>
+    <h1>All Users page ${users}</h1>
 
     <ul>
-        <c:forEach items="${users}" var="users">
+        <c:forEach items="${users}" var="user">
             <li>${user}</li>
         </c:forEach>
     </ul>
