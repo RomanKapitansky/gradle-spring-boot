@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.PostConstruct;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -18,10 +19,16 @@ public class UsersController {
     @Autowired
     UserRepository userRepository;
 
-    @RequestMapping(value = "/show-all", method = RequestMethod.GET)
+    @RequestMapping(value = "/showAll", method = RequestMethod.GET)
     public ModelAndView showAll() {
-        List<User> allUsers = userRepository.findAll();
+        List<User> allUsers = new ArrayList<>();//userRepository.findAll();
+        allUsers.add(new User("Name"));
         return new ModelAndView("allUsers", "users", allUsers);
+    }
+
+    @RequestMapping(value = "/hello", method = RequestMethod.GET)
+    public String hello() {
+        return "hello from User Controller";
     }
 
     @PostConstruct
