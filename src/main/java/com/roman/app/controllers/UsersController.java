@@ -1,14 +1,15 @@
 package com.roman.app.controllers;
 
-import com.roman.app.repositories.UserRepository;
 import com.roman.app.model.User;
+import com.roman.app.repositories.UserRepository;
+import org.hibernate.criterion.Example;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
+import org.apache.commons.lang3.RandomUtils;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -33,11 +34,14 @@ public class UsersController {
     }
 
     @RequestMapping(value = "/deleteUser", method = RequestMethod.POST)
-    public ModelAndView deleteUser(User userId) {
-        userRepository.delete(userId.getId());
-        return new ModelAndView(
-                new RedirectView("/showAll", true)
-        );
+    public ModelAndView deleteUser(User user) {
+        long userId = user.getId();
+        if (userRepository.exists(userId)) {
+            userRepository.delete(userId);
+            return new ModelAndView(new RedirectView("/showAll", true));
+        } else {
+            return new ModelAndView("errorMessage", "message", "There is no user with id = " + userId);
+        }
     }
 
     @RequestMapping(value = "/addUser", method = RequestMethod.GET)
@@ -47,6 +51,11 @@ public class UsersController {
 
     @RequestMapping(value = "/addUser", method = RequestMethod.POST)
     public ModelAndView addUser(User user) {
+        if (user.getName() == null || user.getName().isEmpty()) {
+            return new ModelAndView("errorMessage", "message", "Please fill User name parameter");
+        } else if (userRepository.findByName(user.getName()) != null) {
+            return new ModelAndView("errorMessage", "message", "User with such name already exists in DB!");
+        }
         userRepository.save(user);
         return new ModelAndView(
                 new RedirectView("/showAll", true)
@@ -60,7 +69,9 @@ public class UsersController {
 
     @PostConstruct
     public void postConstruct() {
-        userRepository.save(new User("Ron"));
+        userRepository.save(new User("Johnny", RandomUtils.nextInt(10, 70)));
+        userRepository.save(new User("Tommy", RandomUtils.nextInt(10, 70)));
+        userRepository.save(new User("Deedee", RandomUtils.nextInt(10, 70)));
     }
 
     @PreDestroy

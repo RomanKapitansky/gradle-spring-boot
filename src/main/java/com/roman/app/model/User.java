@@ -10,6 +10,11 @@ public class User {
         this.name = name;
     }
 
+    public User(String name, Integer age) {
+        this.name = name;
+        this.age = age;
+    }
+
     public User() {
     }
 
@@ -17,7 +22,7 @@ public class User {
     @Id
     private Long id;
     private String name;
-    //private String  education;
+    private Integer age = 0;
 
     public Long getId() {
         return id;
@@ -35,8 +40,20 @@ public class User {
         this.name = name;
     }
 
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
+
     @Override
     public String toString() {
-        return "Employee [id=" + id + ", name=" + name + "]";
+        return "Employee [" +
+                "id=" + id + ", " +
+                "name=" + name + ", " +
+                "age=" + age +
+                "]";
     }
 }

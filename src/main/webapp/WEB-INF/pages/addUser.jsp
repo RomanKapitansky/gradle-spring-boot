@@ -9,8 +9,12 @@
         <div>
             <form:label path="name">Name</form:label>
             <form:input path="name" />
-            <form:errors path="name" />
         </div>
+        <div>
+            <form:label path="age">Age </form:label>
+            <form:input path="age" />
+        </div>
+        <br>
         <div>
             <input type="submit" value="ADD"/>
         </div>
