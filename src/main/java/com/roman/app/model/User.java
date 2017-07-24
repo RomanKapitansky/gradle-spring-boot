@@ -48,7 +48,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "Employee [" +
+        return "User [" +
                 "id=" + id + ", " +
                 "name=" + name + ", " +
                 "age=" + age +
