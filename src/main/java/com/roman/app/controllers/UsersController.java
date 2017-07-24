@@ -2,7 +2,6 @@ package com.roman.app.controllers;
 
 import com.roman.app.model.User;
 import com.roman.app.repositories.UserRepository;
-import org.hibernate.criterion.Example;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -60,11 +59,6 @@ public class UsersController {
         return new ModelAndView(
                 new RedirectView("/showAll", true)
         );
-    }
-
-    @RequestMapping(value = "/hello", method = RequestMethod.GET)
-    public String hello() {
-        return "hello from User Controller";
     }
 
     @PostConstruct

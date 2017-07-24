@@ -3,8 +3,11 @@ package com.roman.app.model;
 import javax.persistence.*;
 
 @Entity
-//@Table(name = "users", catalog = "app")
+@Table(name = "users")
 public class User {
+
+    public User() {
+    }
 
     public User(String name) {
         this.name = name;
@@ -15,21 +18,16 @@ public class User {
         this.age = age;
     }
 
-    public User() {
-    }
-
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
     private Long id;
+    @Column
     private String name;
+    @Column
     private Integer age = 0;
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -50,7 +48,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "Employee [" +
+        return "User [" +
                 "id=" + id + ", " +
                 "name=" + name + ", " +
                 "age=" + age +
