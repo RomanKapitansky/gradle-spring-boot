@@ -1,8 +1,12 @@
 package com.roman.app.exception;
 
-public class NoSuchUserException extends Exception{
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
-    public NoSuchUserException () {
-        super("Can't find user with this id");
+@ResponseStatus(value = HttpStatus.NOT_FOUND)
+public class NoSuchUserException extends RuntimeException{
+
+    public NoSuchUserException() {
+        super("Can not find user with this id");
     }
 }

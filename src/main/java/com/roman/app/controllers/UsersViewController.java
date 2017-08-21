@@ -3,6 +3,7 @@ package com.roman.app.controllers;
 import com.roman.app.model.User;
 import com.roman.app.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,7 +17,7 @@ import java.util.List;
 
 @RestController
 //@RequestMapping("/users") TODO: make it work wih RedirectView
-public class UsersController {
+public class UsersViewController {
 
     @Autowired
     UserRepository userRepository;
@@ -41,6 +42,11 @@ public class UsersController {
         } else {
             return new ModelAndView("errorMessage", "message", "There is no user with id = " + userId);
         }
+    }
+
+    @ExceptionHandler(NullPointerException.class)
+    public ModelAndView handleNullPointerException(NullPointerException ex) {
+        return new ModelAndView("errorMessage", "message", "can not find user by id " + ex.getCause());
     }
 
     @RequestMapping(value = "/addUser", method = RequestMethod.GET)

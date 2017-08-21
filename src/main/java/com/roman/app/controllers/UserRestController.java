@@ -4,11 +4,10 @@ import com.roman.app.exception.NoSuchUserException;
 import com.roman.app.model.User;
 import com.roman.app.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,15 +21,11 @@ public class UserRestController {
     UserRepository userRepository;
 
     @GetMapping(value = "/findUserById", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Map<String, String> findUserById(@RequestParam(value="id") long id) {
+    public Map<String, String> findUserById(@RequestParam(value = "id") long id) {
         Map<String, String> response = new HashMap<>();
-        try {
-            User user = userRepository.findById(id);
-            response.put("status", "success");
-            response.put("userData", user.toString());
-        } catch (Exception e) {
-            response.put("status", "user has not been found");
-        }
+        User user = userRepository.findById(id);
+        response.put("status", "success");
+        response.put("userData", user.toString());
         return response;
     }
 
@@ -38,12 +33,20 @@ public class UserRestController {
     public User updateUserById(
             @RequestParam(value="id") long id,
             @RequestParam(value="name", required = false) String name,
-            @RequestParam(value = "age", required = false) Integer age) throws NoSuchUserException {
+            @RequestParam(value = "age") Integer age)  {
         if (userRepository.exists(id)) {
             userRepository.updateById(id, name, age);
             return userRepository.findById(id);
 
         } else
             throw new NoSuchUserException();
+    }
+
+    @ExceptionHandler(value = {NullPointerException.class})
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    protected ResponseEntity<String> handle() {
+        String responseBody = "User was not found";
+        ResponseEntity<String> responseEntity = new ResponseEntity<>(responseBody, HttpStatus.NOT_FOUND);
+        return responseEntity;
     }
 }
